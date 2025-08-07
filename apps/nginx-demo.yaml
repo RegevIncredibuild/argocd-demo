@@ -4,7 +4,7 @@ metadata:
   name: nginx-demo
   namespace: argocd  # This remains argocd - it's where the Application object is stored
 spec:
-  project: default
+  project: demo-project  # Updated to use our custom project
   source:
     repoURL: https://github.com/RegevIncredibuild/argocd-demo.git
     targetRevision: HEAD
