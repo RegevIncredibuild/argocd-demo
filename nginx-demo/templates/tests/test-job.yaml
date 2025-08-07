@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-test-job"
+  labels:
+    app: {{ .Release.Name }}
+    test: "true"
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        test: "true"
+    spec:
+      containers:
+      - name: test
+        image: curlimages/curl:7.78.0
+        env:
+        - name: MESSAGE
+          value: "{{ .Values.message }}"
+        command:
+        - sh
+        - -c
+        - |
+          echo "Starting test for {{ .Release.Name }} with message: $MESSAGE"
+          curl -v {{ .Release.Name }}:{{ .Values.service.port }} || exit 1
+          echo "Test completed successfully!"
+      restartPolicy: Never
