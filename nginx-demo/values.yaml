@@ -14,6 +14,12 @@ service:
 # Change this value to see automatic updates through ArgoCD
 message: "Hello from ArgoCD! Version 1.0"
 
+# Debug settings
+debug:
+  enabled: true
+  showDetails: true
+  logLevel: debug
+
 resources:
   limits:
     cpu: 100m

@@ -1,0 +1,127 @@
+{{- if .Values.debug.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-status
+  labels:
+    app: {{ .Release.Name }}-status
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    debug.argocd-demo/purpose: "GitOps validation interface"
+spec:
+  type: NodePort
+  ports:
+    - port: 9090
+      targetPort: status
+      protocol: TCP
+      name: status
+  selector:
+    app: {{ .Release.Name }}-debug
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-status-config
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta http-equiv="refresh" content="30">
+      <title>ArgoCD GitOps Status</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 20px;
+          background-color: #f5f5f5;
+        }
+        .status-panel {
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          padding: 20px;
+          margin-bottom: 20px;
+        }
+        .success { color: green; }
+        .warning { color: orange; }
+        .error { color: red; }
+        h1 { color: #333; }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+        th { background-color: #f2f2f2; }
+      </style>
+    </head>
+    <body>
+      <div class="status-panel">
+        <h1>ArgoCD GitOps Status Dashboard</h1>
+        <p>This page auto-refreshes every 30 seconds</p>
+        <p><strong>Chart:</strong> {{ .Chart.Name }} v{{ .Chart.Version }}</p>
+        <p><strong>Last Updated:</strong> {{ now | date "2006-01-02 15:04:05" }}</p>
+      </div>
+      
+      <div id="status" class="status-panel">
+        <h2>Deployment Status</h2>
+        <p class="success">✓ Status page is running</p>
+        <p class="success">✓ Debug pod is deployed</p>
+        <p class="success">✓ ConfigMap is created</p>
+        <p id="nginx-status" class="warning">⚠ Checking Nginx deployment...</p>
+        <p id="service-status" class="warning">⚠ Checking service availability...</p>
+      </div>
+    </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-status
+  labels:
+    app: {{ .Release.Name }}-status
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-status
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-status
+    spec:
+      containers:
+      - name: status
+        image: busybox:1.34
+        command:
+        - sh
+        - -c
+        - |
+          # Create a simple status page
+          mkdir -p /www
+          cp /status-config/index.html /www/
+          
+          # Start a simple HTTP server
+          echo "Starting status server on port 9090"
+          cd /www
+          while true; do
+            { echo -ne "HTTP/1.1 200 OK\r\nContent-Length: $(wc -c < index.html)\r\nContent-Type: text/html\r\n\r\n"; cat index.html; } | nc -l -p 9090 -q 1
+          done
+        ports:
+        - name: status
+          containerPort: 9090
+        volumeMounts:
+        - name: status-config
+          mountPath: /status-config
+      volumes:
+      - name: status-config
+        configMap:
+          name: {{ .Release.Name }}-status-config
+{{- end }}

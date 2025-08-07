@@ -2,5 +2,9 @@ apiVersion: v2
 name: nginx-demo
 description: A simple Nginx demo chart for ArgoCD
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "1.21.0"
+annotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  argocd.argoproj.io/sync-wave: "1"
+  debug.argocd-demo/last-update: "2025-08-07"

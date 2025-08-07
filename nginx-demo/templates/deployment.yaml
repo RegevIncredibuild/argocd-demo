@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+    debug.argocd-demo/version: "{{ .Chart.Version }}"
+    debug.argocd-demo/timestamp: "{{ now | date "2006-01-02 15:04:05" }}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+      annotations:
+        debug.argocd-demo/pod-template-version: "{{ .Chart.Version }}"
+        debug.argocd-demo/config-checksum: "{{ toYaml .Values | sha256sum }}"
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /usr/share/nginx/html
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.debug.enabled }}
+          env:
+            - name: DEBUG_ENABLED
+              value: "true"
+            - name: LOG_LEVEL
+              value: {{ .Values.debug.logLevel | quote }}
+          {{- end }}
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ .Release.Name }}-configmap
