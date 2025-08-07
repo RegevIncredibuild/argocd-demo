@@ -1,5 +1,5 @@
 # Default values for nginx-demo
-replicaCount: 3
+replicaCount: 1
 
 image:
   repository: nginx
