@@ -16,7 +16,7 @@ spec:
       protocol: TCP
       name: status
   selector:
-    app: {{ .Release.Name }}-debug
+    app: {{ .Release.Name }}-status
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -71,7 +71,7 @@ data:
       <div id="status" class="status-panel">
         <h2>Deployment Status</h2>
         <p class="success">✓ Status page is running</p>
-        <p class="success">✓ Debug pod is deployed</p>
+        <p class="success">✓ Deployment pod is deployed</p>
         <p class="success">✓ ConfigMap is created</p>
         <p id="nginx-status" class="warning">⚠ Checking Nginx deployment...</p>
         <p id="service-status" class="warning">⚠ Checking service availability...</p>
