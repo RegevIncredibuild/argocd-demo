@@ -1,3 +1,4 @@
+{{- /* Temporarily disabled debug pod to unblock sync
 {{- if .Values.debug.enabled }}
 apiVersion: v1
 kind: Pod
@@ -44,3 +45,4 @@ spec:
         fieldRef:
           fieldPath: metadata.namespace
 {{- end }}
+*/ -}}

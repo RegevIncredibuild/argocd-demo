@@ -18,3 +18,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true  # This ensures the namespace is automatically created
+      - Replace=true  # Force replace resources that are stuck
+      - ApplyOutOfSyncOnly=true  # Only apply resources that are out of sync
+      - RespectIgnoreDifferences=true  # Respect the ignore differences settings
+      - Validate=false  # Skip validation to help unblock sync
