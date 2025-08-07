@@ -16,9 +16,9 @@ message: "Hello from ArgoCD! Version 1.0"
 
 # Debug settings
 debug:
-  enabled: true
-  showDetails: true
-  logLevel: debug
+  enabled: false  # Temporarily disable debug to fix sync issues
+  showDetails: false
+  logLevel: info
 
 resources:
   limits:
