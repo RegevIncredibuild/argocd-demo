@@ -3,16 +3,23 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
-    app: {{ .Release.Name }}
+    {{- include "common.labels" . | nindent 4 }}
+  annotations:
+    {{- include "common.debugAnnotations" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      {{- include "common.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        {{- include "common.labels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+        {{- include "common.debugAnnotations" $ | nindent 8 }}
+      {{- end }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -25,8 +32,36 @@ spec:
           volumeMounts:
             - name: nginx-config
               mountPath: /usr/share/nginx/html
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        {{- if and .Values.debug.enabled .Values.debug.debugSidecar.enabled }}
+        - name: debug
+          image: {{ .Values.debug.debugSidecar.image }}
+          command: {{ .Values.debug.debugSidecar.command }}
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        {{- end }}
       volumes:
         - name: nginx-config
           configMap:

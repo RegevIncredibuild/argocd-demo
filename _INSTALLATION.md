@@ -1,6 +1,7 @@
 # ArgoCD App of Apps Installation Guide
 
-This guide explains how to deploy the complete application ecosystem using the App of Apps pattern.
+This guide explains how to deploy the complete application ecosystem 
+using the App of Apps pattern.
 
 ## Installation Steps
 

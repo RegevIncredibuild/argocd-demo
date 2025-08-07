@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-application # Replace with your app name
+  namespace: argocd
+  # Add these annotations for improved visibility in ArgoCD
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: "platform-alerts"
+spec:
+  # Specify a project other than default for better RBAC
+  project: default # Replace with your project name if available
+
+  # Source configuration - where to find your application code
+  source:
+    repoURL: https://github.com/RegevIncredibuild/argocd-demo.git # Replace with your repo
+    targetRevision: HEAD # Or specify a branch/tag
+    path: my-application # Replace with your application directory
+
+    # Helm specific configuration - if using Helm
+    helm:
+      # Override values in values.yaml
+      values: |
+        replicaCount: 2
+        
+        # Enable debug for troubleshooting
+        debug:
+          enabled: false
+          logLevel: "info"
+        
+        # Set resource requests/limits
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+
+  # Destination cluster and namespace
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: my-application-ns # Replace with your preferred namespace
+
+  # Sync policy - how ArgoCD should sync your application
+  syncPolicy:
+    automated:
+      prune: true # Remove resources that no longer exist in Git
+      selfHeal: true # Re-apply resources when drift is detected
+    syncOptions:
+      - CreateNamespace=true # Automatically create the namespace if it doesn't exist
+      - ApplyOutOfSyncOnly=true # Only apply resources that are out of sync
+      - PrunePropagationPolicy=foreground # Ensure resources are completely removed
+
+  # For apps with multiple dependencies, you can specify them here
+  # to ensure they sync in the correct order
+  # ignoreDifferences:
+  # - group: apps
+  #   kind: Deployment
+  #   jsonPointers:
+  #   - /spec/replicas

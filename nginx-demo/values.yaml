@@ -13,6 +13,17 @@ service:
 
 message: "Hello from ArgoCD!123"
 
+# Debug options for troubleshooting
+debug:
+  enabled: false
+  logLevel: "info" # Options: debug, info, warn, error
+  includeConfigDump: false
+  additionalAnnotations: {}
+  debugSidecar:
+    enabled: false
+    image: busybox:latest
+    command: ["sh", "-c", "while true; do sleep 30; done"]
+
 resources:
   limits:
     cpu: 100m
@@ -20,3 +31,26 @@ resources:
   requests:
     cpu: 50m
     memory: 64Mi
+
+# Health checks
+livenessProbe:
+  enabled: true
+  path: /
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  enabled: true
+  path: /
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+# Annotations and labels
+podAnnotations: {}
+podLabels: {}
+
+# Test configuration
+test:
+  enabled: true
+  image: curlimages/curl:7.78.0
+  timeout: 60
