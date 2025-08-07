@@ -17,6 +17,7 @@ Using the ArgoCD UI:
 - Click "CREATE"
 
 Or
+
 ```bash
 # Apply the root application to your ArgoCD instance
 kubectl apply -f _root-app.yaml -n argocd
@@ -25,8 +26,6 @@ kubectl apply -f _root-app.yaml -n argocd
 ### 2. Verify Deployment
 
 After deploying the root application, it will automatically:
-- Deploy the `demo-project` custom project
-- Deploy the `application-set` for dynamic application discovery
 - Deploy all applications defined in the `apps/` directory
 
 ### 3. Adding New Applications
@@ -67,6 +66,4 @@ If an application fails to sync:
 
 The application follows this hierarchy:
 - Root Application (`argocd-apps`) manages:
-  - Project Definition (`demo-project`)
-  - ApplicationSet (`cluster-apps`)
   - Individual Applications (like `nginx-demo`)

@@ -4,7 +4,7 @@ metadata:
   name: "{{ .Release.Name }}-test-connection"
   labels:
     app: {{ .Release.Name }}
-    test: true
+    test: "true"
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": hook-succeeded
