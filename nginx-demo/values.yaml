@@ -11,7 +11,7 @@ service:
   port: 80
   nodePort: 30080
 
-message: "Hello from ArgoCD!"
+message: "Hello from ArgoCD!123"
 
 resources:
   limits:
