@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: nginx-demo
-  namespace: argocd
+  namespace: argocd  # This remains argocd - it's where the Application object is stored
 spec:
   project: default
   source:
@@ -11,10 +11,10 @@ spec:
     path: nginx-demo
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: nginx-demo  # Changed from default to a dedicated namespace
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=true  # This ensures the namespace is automatically created
