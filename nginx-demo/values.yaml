@@ -1,5 +1,5 @@
 # Default values for nginx-demo
-replicaCount: 3
+replicaCount: 1
 
 image:
   repository: nginx
@@ -10,15 +10,7 @@ service:
   type: ClusterIP
   port: 80
 
-# This is our configurable message that will be displayed
-# Change this value to see automatic updates through ArgoCD
-message: "Hello from ArgoCD!! Version 1.0"
-
-# Debug settings
-debug:
-  enabled: false  # Temporarily disable debug to fix sync issues
-  showDetails: false
-  logLevel: info
+message: "Hello from ArgoCD!"
 
 resources:
   limits:

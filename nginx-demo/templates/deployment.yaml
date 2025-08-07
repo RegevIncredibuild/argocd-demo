@@ -4,11 +4,6 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/compare-options: IgnoreExtraneous
-    debug.argocd-demo/version: "{{ .Chart.Version }}"
-    debug.argocd-demo/timestamp: "{{ now | date "2006-01-02 15:04:05" }}"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -18,9 +13,6 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-      annotations:
-        debug.argocd-demo/pod-template-version: "{{ .Chart.Version }}"
-        debug.argocd-demo/config-checksum: "{{ toYaml .Values | sha256sum }}"
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -35,13 +27,6 @@ spec:
               mountPath: /usr/share/nginx/html
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.debug.enabled }}
-          env:
-            - name: DEBUG_ENABLED
-              value: "true"
-            - name: LOG_LEVEL
-              value: {{ .Values.debug.logLevel | quote }}
-          {{- end }}
       volumes:
         - name: nginx-config
           configMap:

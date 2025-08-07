@@ -9,14 +9,14 @@ To add a new application:
 ArgoCD will automatically detect and deploy these applications.
 
 argocd-demo/
-├── apps/                   # Bootstrap directory containing Application definitions
-│   ├── nginx-demo.yaml     # Application definition for the Nginx demo
-│   └── README.md           # Documentation
+├── apps/                       # Bootstrap directory containing Application definitions
+│   ├── nginx-demo-app.yaml     # Application definition for the Nginx demo
+│   └── README.md               # Documentation
 │
 └── nginx-demo/             # Actual application code/charts
-├── Chart.yaml
-├── values.yaml
-└── templates/
-├── deployment.yaml
-├── service.yaml
-└── configmap.yaml
+   ├── Chart.yaml
+   ├── values.yaml
+   └── templates/
+      ├── deployment.yaml
+      ├── service.yaml
+      └── configmap.yaml

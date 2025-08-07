@@ -2,60 +2,26 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
-  annotations:
-    argocd.argoproj.io/sync-wave: "1"
-    debug.argocd-demo/version: "{{ .Chart.Version }}"
-    debug.argocd-demo/timestamp: "{{ now | date "2006-01-02 15:04:05" }}"
+  labels:
+    app: {{ .Release.Name }}
 data:
   index.html: |
     <!DOCTYPE html>
     <html>
     <head>
-      <title>Nginx Demo</title>
+      <title>Welcome to nginx on Kubernetes!</title>
       <style>
         body {
           width: 35em;
           margin: 0 auto;
           font-family: Tahoma, Verdana, Arial, sans-serif;
-          background-color: #f0f0f0;
-          padding: 20px;
-        }
-        .message {
-          font-size: 24px;
-          color: #333;
-          background-color: #fff;
-          padding: 20px;
-          border-radius: 5px;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-          margin-top: 20px;
-        }
-        .debug {
-          margin-top: 20px;
-          padding: 10px;
-          background-color: #f8f8f8;
-          border: 1px solid #ddd;
-          font-family: monospace;
-          font-size: 12px;
         }
       </style>
     </head>
     <body>
-      <h1>Nginx Demo for ArgoCD</h1>
-      <div class="message">
-        {{ .Values.message }}
-      </div>
-      <p>Deployed automatically by ArgoCD</p>
-      <p>Last deployed: {{ now | date "2006-01-02 15:04:05" }}</p>
-      
-      {{- if .Values.debug.showDetails }}
-      <div class="debug">
-        <h3>Debug Info</h3>
-        <p>Chart Version: {{ .Chart.Version }}</p>
-        <p>App Version: {{ .Chart.AppVersion }}</p>
-        <p>Release Name: {{ .Release.Name }}</p>
-        <p>Release Namespace: {{ .Release.Namespace }}</p>
-        <p>Release IsUpgrade: {{ .Release.IsUpgrade }}</p>
-      </div>
-      {{- end }}
+      <h1>Welcome to nginx on Kubernetes!</h1>
+      <p>{{ .Values.message }}</p>
+      <p>For online documentation and support please refer to
+      <a href="http://nginx.org/">nginx.org</a>.</p>
     </body>
     </html>

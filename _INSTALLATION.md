@@ -6,18 +6,20 @@ This guide explains how to deploy the complete application ecosystem using the A
 
 ### 1. Install the Root Application
 
-This is the only manual step required. The root application will manage all other applications.
+This is the only manual step required. 
+The root application will manage all other applications.
 
-```bash
-# Apply the root application to your ArgoCD instance
-kubectl apply -f root-app.yaml -n argocd
-```
-
-Or using the ArgoCD UI:
+Using the ArgoCD UI:
 - Click "+ NEW APP" button
 - Select "EDIT AS YAML"
 - Paste the contents of the root-app.yaml file
 - Click "CREATE"
+
+Or
+```bash
+# Apply the root application to your ArgoCD instance
+kubectl apply -f _root-app.yaml -n argocd
+```
 
 ### 2. Verify Deployment
 
