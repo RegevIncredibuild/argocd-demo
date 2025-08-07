@@ -2,6 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}
+  annotations:
+    argocd.argoproj.io/sync-options: Replace=true
+    # Added debug and validation information 
+    app.kubernetes.io/message: "{{ .Values.message }}"
+    app.kubernetes.io/deployed-at: "{{ now }}"
+    app.kubernetes.io/validate-url: "http://{{ .Release.Name }}:{{ .Values.service.port }}"
   labels:
     app: {{ .Release.Name }}
   {{- if .Values.debug.enabled }}
