@@ -1,0 +1,23 @@
+# Default values for nginx-demo
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: "1.21.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+# This is our configurable message that will be displayed
+# Change this value to see automatic updates through ArgoCD
+message: "Hello from ArgoCD! Version 1.0"
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
