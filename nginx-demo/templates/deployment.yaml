@@ -10,10 +10,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "common.selectorLabels" . | nindent 6 }}
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
+        app: {{ .Release.Name }}
         {{- include "common.labels" . | nindent 8 }}
       {{- with .Values.podAnnotations }}
       annotations:
