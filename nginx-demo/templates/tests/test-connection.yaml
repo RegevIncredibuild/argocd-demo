@@ -3,15 +3,16 @@ kind: Pod
 metadata:
   name: "{{ .Release.Name }}-test-connection"
   labels:
-    {{- include "common.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}
+    test: true
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   containers:
     - name: wget
-      image: {{ .Values.test.image }}
+      image: curlimages/curl:7.78.0
       command: ['curl']
       args: ['{{ .Release.Name }}:{{ .Values.service.port }}']
   restartPolicy: Never
-  terminationGracePeriodSeconds: {{ .Values.test.timeout | default 60 }}
+  terminationGracePeriodSeconds: 60

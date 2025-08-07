@@ -3,9 +3,12 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
-    {{- include "common.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}
+  {{- if .Values.debug.enabled }}
   annotations:
-    {{- include "common.debugAnnotations" . | nindent 4 }}
+    debug.argocd/enabled: "{{ .Values.debug.enabled }}"
+    debug.argocd/logLevel: "{{ .Values.debug.logLevel }}"
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -15,11 +18,10 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
-        {{- include "common.labels" . | nindent 8 }}
-      {{- with .Values.podAnnotations }}
+      {{- if .Values.debug.enabled }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-        {{- include "common.debugAnnotations" $ | nindent 8 }}
+        debug.argocd/enabled: "{{ .Values.debug.enabled }}"
+        debug.argocd/logLevel: "{{ .Values.debug.logLevel }}"
       {{- end }}
     spec:
       containers:
@@ -54,7 +56,10 @@ spec:
         {{- if and .Values.debug.enabled .Values.debug.debugSidecar.enabled }}
         - name: debug
           image: {{ .Values.debug.debugSidecar.image }}
-          command: {{ .Values.debug.debugSidecar.command }}
+          command: 
+            - sh
+            - -c
+            - "while true; do sleep 30; done"
           resources:
             requests:
               cpu: 10m

@@ -5,14 +5,13 @@ Your application has been deployed with the following configuration:
 - Release Name: {{ .Release.Name }}
 - Replicas: {{ .Values.replicaCount }}
 - Image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-- Custom Message: {{ .Values.message }}
 
 {{- if eq .Values.service.type "NodePort" }}
 You can access the application at:
   http://<node-ip>:{{ .Values.service.nodePort }}
 {{- else if eq .Values.service.type "LoadBalancer" }}
 You can access the application at the LoadBalancer external IP:
-  kubectl get svc -n {{ .Release.Namespace }} {{ .Release.Name }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+  kubectl get svc -n {{ .Release.Namespace }} {{ .Release.Name }}
 {{- else }}
 You can access the application by port-forwarding:
   kubectl port-forward -n {{ .Release.Namespace }} svc/{{ .Release.Name }} {{ .Values.service.port }}:{{ .Values.service.port }}
@@ -21,16 +20,4 @@ You can access the application by port-forwarding:
 
 {{- if .Values.debug.enabled }}
 Debug mode is ENABLED with level: {{ .Values.debug.logLevel }}
-{{- if .Values.debug.debugSidecar.enabled }}
-A debug sidecar container has been deployed for troubleshooting.
-You can exec into it with:
-  kubectl exec -it -n {{ .Release.Namespace }} deploy/{{ .Release.Name }} -c debug -- sh
 {{- end }}
-{{- end }}
-
-{{- if .Values.test.enabled }}
-To run tests for this application:
-  helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
-{{- end }}
-
-For more information, visit the ArgoCD UI or see the DEVELOPER_GUIDE.md
