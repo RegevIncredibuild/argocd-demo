@@ -7,20 +7,13 @@ jobs:
     ascii_job:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout Repo
-              uses: actions/checkout@v4
+        - name: Checkout Repo
+          uses: actions/checkout@v4
 
-            - name: install Cowsay Program
-              run: sudo apt-get install cowsay -y
+        - name: List Repo files
+          run: ls -ltra
+            
+        - name: Executing shall script
+          run: ./ascii-script.sh
 
-            - name: Execute Cowsay CMD
-              run: cowsay -f dragon "Run you fools" >> dragon.txt
 
-            - name: test File exists
-              run: grep -i "fools" dragon.txt
-
-            - name: Read File
-              run: cat dragon.txt
-
-            - name: List Repo files
-              run: ls -ltra
