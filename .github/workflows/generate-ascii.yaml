@@ -15,7 +15,7 @@ jobs:
             
         - name: Executing shall script
           run: |
-            chmod +x ascii-script.sh
-            ./ascii-script.sh
+            chmod +x .github/workflows/generate-ascii.yaml
+            .github/workflows/generate-ascii.yaml
 
 
