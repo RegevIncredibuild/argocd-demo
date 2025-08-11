@@ -18,7 +18,7 @@ spec:
         - name: demo
           image: busybox:1.35
           command: ["/bin/sh"]
-          args: ["-c", "while true; do echo '=== GitOps AWS Secrets Demo ==='; echo 'Environment Variable:' $DEMO_SECRET; echo 'Mounted File:'; cat /mnt/secrets/demo-key 2>/dev/null || echo 'File not found'; echo '================================'; sleep 30; done"]
+          args: ["-c", "echo '=== GitOps AWS Secrets Demo ==='; echo 'Environment Variable:' $DEMO_SECRET; echo 'Mounted File:'; cat /mnt/secrets/demo-key 2>/dev/null || echo 'File not found'; echo '\n================================'; echo 'Test completed successfully!'; sleep 600"]
           env:
             - name: DEMO_SECRET
               valueFrom:
@@ -43,3 +43,4 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "demo-secret-dev-spc"
+      restartPolicy: Always
