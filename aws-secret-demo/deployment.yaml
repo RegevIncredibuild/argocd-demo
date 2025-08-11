@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-secret-demo
+  namespace: demo-secret
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-secret-demo
+  template:
+    metadata:
+      labels:
+        app: aws-secret-demo
+    spec:
+      serviceAccountName: aws-secret-demo-sa
+      containers:
+        - name: demo
+          image: busybox
+          command: ["sh", "-c", "while true; do echo Secret value: $(cat /mnt/secrets-store/demo-key); sleep 30; done"]
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+          env:
+            - name: DEMO_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret-demo-secret
+                  key: demo-key
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: aws-secret-demo
