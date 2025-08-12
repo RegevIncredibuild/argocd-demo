@@ -17,7 +17,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io  # Ensures proper cleanup of managed resources when app is deleted
 spec:
-  project: devteam1  # ArgoCD project - 'default' allows deployment to any cluster/namespace
+  project: default  # ArgoCD project - 'default' allows deployment to any cluster/namespace
 
   # SOURCE: Where to find the Helm chart
   source:
