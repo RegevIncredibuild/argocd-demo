@@ -18,7 +18,7 @@ spec:
         - name: demo
           image: busybox:1.35
           command: ["/bin/sh"]
-          args: ["-c", "while true; do echo '=== GitOps AWS Secrets Demo - '$(date)' ==='; echo 'Environment Variable:' $DEMO_SECRET; echo 'Mounted File:'; cat /mnt/secrets/demo-key 2>/dev/null || echo 'File not found'; echo '================================'; sleep 30; done"]
+          args: ["-c", "while true; do echo '=== GitOps AWS Secrets Demo - '$(date)' ==='; echo 'Environment Variable:' $DEMO_SECRET; echo 'Mounted File:'; cat /mnt/secrets/demo-key 2>/dev/null || echo 'File not found'; echo '\n================================'; sleep 30; done"]
           env:
             - name: DEMO_SECRET
               valueFrom:
