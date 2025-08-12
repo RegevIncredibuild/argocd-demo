@@ -12,7 +12,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: devteam1-demo-app
+  name: devteam1-release-app
   namespace: argocd  # ArgoCD control plane namespace
   finalizers:
     - resources-finalizer.argocd.argoproj.io  # Ensures proper cleanup of managed resources when app is deleted
@@ -22,7 +22,7 @@ spec:
   # SOURCE: Where to find the Helm chart
   source:
     repoURL: https://github.com/RegevIncredibuild/saas-devteam1.git  # Update this to your actual repo URL
-    targetRevision: master  # Always deploy from latest commit on default branch
+    targetRevision: 1.0.0  # Always deploy from latest commit on default branch
     path: helm  # Directory containing the Helm chart
 #    helm:
 #      # Optional: Override values
@@ -39,7 +39,7 @@ spec:
   # DESTINATION: Where to deploy the application resources
   destination:
     server: https://kubernetes.default.svc  # Deploy to same cluster as ArgoCD control plane
-    namespace: devteam1-demo-app-ns  # Target namespace for application resources
+    namespace: devteam1-release-app-ns  # Target namespace for application resources
 
   # SYNC POLICY: How ArgoCD manages the application lifecycle
   syncPolicy:
