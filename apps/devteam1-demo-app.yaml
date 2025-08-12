@@ -12,7 +12,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: demo-app
+  name: devteam1-demo-app
   namespace: argocd  # ArgoCD control plane namespace
   finalizers:
     - resources-finalizer.argocd.argoproj.io  # Ensures proper cleanup of managed resources when app is deleted
