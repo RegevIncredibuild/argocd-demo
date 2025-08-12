@@ -30,7 +30,7 @@ spec:
         - values.yaml
       # Optional: Set specific values
       values: |
-        replicaCount: 4
+        replicaCount: 2
         app:
           environment: development
         ingress:
