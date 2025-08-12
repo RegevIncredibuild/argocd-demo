@@ -34,7 +34,7 @@ argocd-demo/
 3. **Create ArgoCD application manifest**:
    ```bash
    # Create your application definition in apps/
-   cp apps/nginx-demo-app.yaml apps/my-app.yaml
+   cp apps/nginx-demo-app.yaml.disable apps/my-app.yaml
    # Edit my-app.yaml to point to your new application directory
    ```
 
