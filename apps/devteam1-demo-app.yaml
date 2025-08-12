@@ -22,7 +22,7 @@ spec:
   # SOURCE: Where to find the Helm chart
   source:
     repoURL: https://github.com/RegevIncredibuild/saas-devteam1.git  # Update this to your actual repo URL
-    targetRevision: master  # Always deploy from latest commit on default branch
+    targetRevision: main  # Always deploy from latest commit on default branch
     path: helm  # Directory containing the Helm chart
 #    helm:
 #      # Optional: Override values
