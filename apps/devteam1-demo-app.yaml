@@ -24,17 +24,17 @@ spec:
     repoURL: https://github.com/RegevIncredibuild/saas-devteam1.git  # Update this to your actual repo URL
     targetRevision: main  # Always deploy from latest commit on default branch
     path: helm  # Directory containing the Helm chart
-#    helm:
-#      # Optional: Override values
-#      valueFiles:
-#        - values.yaml
-#      # Optional: Set specific values
-#      values: |
-#        replicaCount: 2
-#        app:
-#          environment: development
-#        ingress:
-#          enabled: false
+    helm:
+      # Optional: Override values
+      valueFiles:
+        - values.yaml
+      # Optional: Set specific values
+      values: |
+        replicaCount: 2
+        app:
+          environment: development
+        ingress:
+          enabled: false
 
   # DESTINATION: Where to deploy the application resources
   destination:
